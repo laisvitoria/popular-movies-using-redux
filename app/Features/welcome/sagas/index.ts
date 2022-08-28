@@ -4,6 +4,7 @@ import { Actions } from '../redux'
 
 function* fetchData(api: ApiType) {
     const response = yield call(api.fetchData)
+    console.log(response)
     try {
         if(response.status !== 200) {
             yield put(Actions.ui.failure())

@@ -1,7 +1,7 @@
 import apisauce from 'apisauce'
 
 // const ITEMS_PER_PAGE = 10
-const BASE_URL = 'https://api.themoviedb.org/3/movie/157336'
+import { BASE_URL, key } from '../config/env.js'
 
 const create = (baseURL = BASE_URL) => {
   const api = apisauce.create({
@@ -9,7 +9,9 @@ const create = (baseURL = BASE_URL) => {
     timeout: 100000
   })
 
-  const fetchData = () => api.get('/movie')
+  console.log(BASE_URL)
+  const getToken = () => api.get(`/authentication/token/new?api_key=${key}`)
+  const fetchData = () => api.get(`/movie/popular?api_key=${key}`)
   return {
     fetchData
   }

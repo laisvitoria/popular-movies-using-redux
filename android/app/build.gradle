@@ -1,5 +1,12 @@
+project.ext.envConfigFiles = [
+  release: ".env.production",
+  debug: ".env.development",
+  stagingrelease: ".env.staging",
+]
+
 apply plugin: 'kotlin-android'
 apply plugin: "com.android.application"
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 
 import com.android.build.OutputFile
 import org.apache.tools.ant.taskdefs.condition.Os
@@ -142,6 +149,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        resValue "string", "build_config_package", "com.reduxapresentationapp"
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
 
         if (isNewArchitectureEnabled()) {
