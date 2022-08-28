@@ -1,41 +1,41 @@
-import "./utils/ignore-warnings"
-import React, { useEffect } from "react"
+import React from "react"
 import { SafeAreaProvider, initialWindowMetrics } from "react-native-safe-area-context"
-import { initFonts } from "./theme/fonts" // expo
-import * as storage from "./utils/storage"
-import { AppNavigator, useNavigationPersistence } from "./navigators"
+import { AppNavigator } from "./navigators"
 import { ToggleStorybook } from "../storybook/toggle-storybook"
+import { Provider } from 'react-redux'
+import { configureStore } from "@reduxjs/toolkit"
+import rootReducer from "./Redux"
 
-export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
-
-/**
- * This is the root component of our app.
- */
 function App() {
-  const {
-    initialNavigationState,
-    onNavigationStateChange,
-    isRestored: isNavigationStateRestored,
-  } = useNavigationPersistence(storage, NAVIGATION_PERSISTENCE_KEY)
+  const store = configureStore({
+    reducer: rootReducer
+  })
 
-  useEffect(() => {
-    ;(async () => {
-      await initFonts() // expo
-    })()
-  }, [])
+  /*
+    é uma abstração amigável do createStore do redux
+    deve ser passado para ele o reducer principal ou um objeto de slice reducers
+    que serão passados automágicamente para o combineReducers
 
-  if (!isNavigationStateRestored) return null
+    OUTROS PARAMETROS:
+    middleware      ---> array opcional de middlewares que serão passados automaticamente para o applyMiddleware
+                        um array de middleware é setado automaticamente
 
-  // otherwise, we're ready to render the app
+    devTools        ---> boolean para indicar se o configureStore dará suporte à extensão do browser Redux DevTools
+    preloadedState  ---> state inicial a ser passado para o createStore (opcional)
+    enhancers       ---> também opcional recebe um array de enhancers que será passado para o compose
+                         ou uma função  de callback que retorna um array de enhancers
+  */
+
+//Link da documentação: https://redux-toolkit.js.org/api/configureStore
+
   return (
-    <ToggleStorybook>
-        <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-            <AppNavigator
-              initialState={initialNavigationState}
-              onStateChange={onNavigationStateChange}
-            />
-        </SafeAreaProvider>
-    </ToggleStorybook>
+    <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+      <Provider store={store}>
+        <ToggleStorybook>
+          <AppNavigator/>
+        </ToggleStorybook>
+      </Provider>
+    </SafeAreaProvider>
   )
 }
 

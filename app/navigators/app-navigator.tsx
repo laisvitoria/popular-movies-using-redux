@@ -1,47 +1,38 @@
-import React from "react"
-import { useColorScheme } from "react-native"
-import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { WelcomeScreen } from "../Features"
-import { navigationRef, useBackButtonHandler } from "./navigation-utilities"
+import React, { useRef } from 'react'
+import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 
-export type NavigatorParamList = {
-  welcome: undefined
-}
+import { WelcomeScreen } from '../Features/welcome/welcome-screen'
+import { NavigationContainer } from '@react-navigation/native'
+import { navigationRef } from './navigation-utilities'
 
-// Documentation: https://reactnavigation.org/docs/stack-navigator/
-const Stack = createNativeStackNavigator<NavigatorParamList>()
+const Stack = createStackNavigator()
 
-const AppStack = () => {
+const AppNavigator = () => {
+  const routeNameRef = useRef<string>()
+
+  const onReady = () => (routeNameRef.current = navigationRef.current.getCurrentRoute().name)
+
+  const onStateChange = async () => {
+    const currentRouteName = navigationRef.current.getCurrentRoute().name
+
+    routeNameRef.current = currentRouteName
+  }
+
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
-      initialRouteName="welcome"
-    >
-      <Stack.Screen name="welcome" component={WelcomeScreen} />
-    </Stack.Navigator>
-  )
-}
-
-interface NavigationProps extends Partial<React.ComponentProps<typeof NavigationContainer>> {}
-
-export const AppNavigator = (props: NavigationProps) => {
-  const colorScheme = useColorScheme()
-  useBackButtonHandler(canExit)
-  return (
-    <NavigationContainer
-      ref={navigationRef}
-      theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-      {...props}
-    >
-      <AppStack />
+    <NavigationContainer ref={navigationRef} onReady={onReady} onStateChange={onStateChange}>
+      <Stack.Navigator
+        initialRouteName={'WelcomeScreen'}
+        screenOptions={{
+          headerTitleAlign: 'center',
+          gestureEnabled: true,
+          gestureDirection: 'horizontal',
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS
+        }}
+      >
+        <Stack.Screen name='WelcomeScreen' component={WelcomeScreen} options={{ headerShown: false }} />
+      </Stack.Navigator>
     </NavigationContainer>
   )
 }
 
-AppNavigator.displayName = "AppNavigator"
-
-const exitRoutes = ["welcome"]
-export const canExit = (routeName: string) => exitRoutes.includes(routeName)
+export default AppNavigator

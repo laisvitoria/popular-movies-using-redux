@@ -3,8 +3,8 @@ import { View, Text } from "react-native"
 
 export const WelcomeScreen: FC = () => {
     return (
-      <View testID="WelcomeScreen">
-        <Text>Primeira tela</Text>
+      <View testID="WelcomeScreen" style={{flex: 1}}>
+        <Text style={{}} >Primeira tela</Text>
       </View>
     )
   }

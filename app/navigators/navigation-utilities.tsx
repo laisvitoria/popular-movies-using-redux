@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react"
+import { useEffect, useRef } from "react"
 import { BackHandler } from "react-native"
 import {
   PartialState,
@@ -79,57 +79,6 @@ export function useBackButtonHandler(canExit: (routeName: string) => boolean) {
   }, [])
 }
 
-/**
- * Custom hook for persisting navigation state.
- */
-export function useNavigationPersistence(storage: any, persistenceKey: string) {
-  const [initialNavigationState, setInitialNavigationState] = useState()
-
-  // This feature is particularly useful in development mode.
-  // It is selectively enabled in development mode with
-  // the following approach. If you'd like to use navigation persistence
-  // in production, remove the __DEV__ and set the state to false
-  const [isRestored, setIsRestored] = useState(!__DEV__)
-
-  const routeNameRef = useRef<string | undefined>()
-
-  const onNavigationStateChange = (state) => {
-    const previousRouteName = routeNameRef.current
-    const currentRouteName = getActiveRouteName(state)
-
-    if (previousRouteName !== currentRouteName) {
-      // track screens.
-      __DEV__ && console.tron.log(currentRouteName)
-    }
-
-    // Save the current route name for later comparision
-    routeNameRef.current = currentRouteName
-
-    // Persist state to storage
-    storage.save(persistenceKey, state)
-  }
-
-  const restoreState = async () => {
-    try {
-      const state = await storage.load(persistenceKey)
-      if (state) setInitialNavigationState(state)
-    } finally {
-      setIsRestored(true)
-    }
-  }
-
-  useEffect(() => {
-    if (!isRestored) restoreState()
-  }, [isRestored])
-
-  return { onNavigationStateChange, restoreState, isRestored, initialNavigationState }
-}
-
-/**
- * use this to navigate without the navigation
- * prop. If you have access to the navigation prop, do not use this.
- * More info: https://reactnavigation.org/docs/navigating-without-navigation-prop/
- */
 export function navigate(name: any, params?: any) {
   if (navigationRef.isReady()) {
     navigationRef.navigate(name as never, params as never)
