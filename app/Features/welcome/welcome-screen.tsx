@@ -6,6 +6,7 @@ import { Actions } from './redux'
 
 export const WelcomeScreen: FC = () => {
     const fetching = useSelector((state: GlobalState) => state.welcome.ui.fetching)
+    const error = useSelector((state: GlobalState) => state.welcome.ui.error)
     const dispatch = useDispatch()
 
     return (
@@ -13,7 +14,7 @@ export const WelcomeScreen: FC = () => {
         {
           fetching ? 
           <Text style={{}} >Carregando...</Text>
-          :
+          : error ? <Text style={{}} >:/ ocorreu um erro. Tente novamente</Text> :
           <View>
             <Text style={{}} >Seja bem vindo!</Text>
             <TouchableOpacity onPress={() => dispatch(Actions.ui.request())}>

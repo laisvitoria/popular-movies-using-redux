@@ -3,13 +3,18 @@ import { SafeAreaProvider, initialWindowMetrics } from "react-native-safe-area-c
 import { AppNavigator } from "./navigators"
 import { ToggleStorybook } from "../storybook/toggle-storybook"
 import { Provider } from 'react-redux'
+import createSagaMiddleware from 'redux-saga'
 import { configureStore } from "@reduxjs/toolkit"
 import rootReducer from "./Redux"
+import rootSagas from './Sagas'
+
+const sagaMiddleware = createSagaMiddleware()
+const store = configureStore({
+  reducer: rootReducer,
+  middleware: [sagaMiddleware]
+})
 
 function App() {
-  const store = configureStore({
-    reducer: rootReducer
-  })
 
   /*
     é uma abstração amigável do createStore do redux
@@ -40,3 +45,4 @@ function App() {
 }
 
 export default App
+sagaMiddleware.run(rootSagas)
