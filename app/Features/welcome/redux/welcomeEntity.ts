@@ -19,6 +19,6 @@ export const welcome = createSlice({
 })
 
 // o Action creators gera as actions a partir das funções passadas para a propriedade reducers
-export const { addData } = welcome.actions
+export const { actions } = welcome
 
 export default welcome.reducer

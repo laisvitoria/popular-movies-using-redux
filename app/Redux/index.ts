@@ -6,3 +6,7 @@ const rootReducer = combineReducers({
 })
 
 export default rootReducer
+
+export interface GlobalState {
+    welcome: ReturnType<typeof combinedWelcomeReducers>
+}
