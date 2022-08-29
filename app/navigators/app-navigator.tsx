@@ -1,7 +1,8 @@
 import React, { useRef } from 'react'
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 
-import { WelcomeScreen } from '../Features/welcome/welcome-screen'
+import { WelcomeScreen } from '../Features/welcome/welcomeScreen'
+import { ListMoviesScreen } from '../Features/listMovies/listMoviesScreen'
 import { NavigationContainer } from '@react-navigation/native'
 import { navigationRef } from './navigation-utilities'
 
@@ -30,6 +31,11 @@ const AppNavigator = () => {
         }}
       >
         <Stack.Screen name='WelcomeScreen' component={WelcomeScreen} options={{ headerShown: false }} />
+        <Stack.Screen name='ListMoviesScreen' component={ListMoviesScreen} options={{
+          headerShown: true,
+          title: 'Filmes Populares',
+          headerTintColor: '#0f2850'
+        }} />
       </Stack.Navigator>
     </NavigationContainer>
   )

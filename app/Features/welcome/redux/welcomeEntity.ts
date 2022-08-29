@@ -1,18 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-type Movie = {
-    title: string
-}
-
-type Data = Movie[] | null
-
-const initialState = []
+const initialState = null
 
 export const welcome = createSlice({
     name: 'welcomeSliceEntity',
     initialState,
     reducers: {
-        addData: (_, action: PayloadAction<Data>) => {
+        addToken: (_, action: PayloadAction<string>) => {
             return action.payload
         }
     }

@@ -9,11 +9,16 @@ const create = (baseURL = BASE_URL) => {
     timeout: 100000
   })
 
-  console.log(BASE_URL)
   const getToken = () => api.get(`/authentication/token/new?api_key=${key}`)
-  const fetchData = () => api.get(`/movie/popular?api_key=${key}`)
+  const getPopularMovies = () => api.get(`/movie/popular?api_key=${key}`)
+  const getTopRatedMovies = () => api.get(`/movie/top_rated?api_key=${key}`)
+  const getMovieDetails = (id: number) => api.get(`/movie/${id}?api_key=${key}`)
+
   return {
-    fetchData
+    getToken,
+    getPopularMovies,
+    getMovieDetails,
+    getTopRatedMovies
   }
 }
 
